@@ -11,8 +11,12 @@ class ItemParser(object):
     def __init__(self, files=None, fields=None, convert_hex=False, 
                  rename_fields=None, detect_lang=False, lang_sep="_"):
         # Desired fields
-        self.fields = fields
-        
+        if fields is None:
+            # All fields will be taken
+            fields = []
+        else:
+            self.fields = fields
+          
         # XML files to be parsed
         self.files = files
         self.convert_hex = convert_hex
@@ -23,6 +27,12 @@ class ItemParser(object):
         self.rename_fields = rename_fields
         self.detect_lang = detect_lang
         self.lang_sep = "-"
+        
+        if rename_fields:
+            self.fields.extend(rename_fields.keys())
+            
+        self.fields = set(self.fields)
+            
         
     def parse(self, lang=None):
         for file in self.files:
@@ -84,7 +94,7 @@ class ItemParser(object):
             
             name = elem.attrib.get('name')
             
-            if not name:
+            if not name or (name not in self.fields and self.fields):
                 continue
             
             if elem.text is None:
