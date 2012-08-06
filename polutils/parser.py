@@ -1,3 +1,4 @@
+import sys
 import re
 from os.path import basename
 from lxml import etree
@@ -28,8 +29,13 @@ class ItemParser(object):
         self.detect_lang = detect_lang
         self.lang_sep = lang_sep
         
+        # Used for the self.items dict key
+        self.id_field = 'id'
         if rename_fields:
             self.fields.extend(rename_fields.keys())
+            if rename_fields.get('id'):
+                self.id_field = rename_fields['id']
+                
             
         self.fields = set(self.fields)
             
@@ -75,10 +81,10 @@ class ItemParser(object):
                     skip = False
                     item = {}
                 elif action == 'end':
-                    if item['id'] in items:
-                        items[item['id']].update(item)
+                    if item[self.id_field] in items:
+                        items[item[self.id_field]].update(item)
                     else:
-                        items[item['id']] = item
+                        items[item[self.id_field]] = item
                 
             # Skip until beginning of item
             if skip:
@@ -105,16 +111,18 @@ class ItemParser(object):
             if isinstance(text, str):
                 text = text.strip()
                     
-            if self.convert_hex and name in hex_fields:
+            if self.convert_hex and name in self.hex_fields:
                 text = int(text, 16)
                 
             if self.rename_fields and name in self.rename_fields:
-                name = self.rename_fields[name]
+                newname = self.rename_fields[name]
+            else:
+                newname = name
                 
             if lang and name in self.lang_fields:
-                item[lang + self.lang_sep + name] = text
+                item[lang + self.lang_sep + newname] = text
             else:
-                item[name] = text
+                item[newname] = text
                 
         self.items = items
         return self.items
