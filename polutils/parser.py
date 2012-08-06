@@ -13,7 +13,7 @@ class ItemParser(object):
         # Desired fields
         if fields is None:
             # All fields will be taken
-            fields = []
+            self.fields = []
         else:
             self.fields = fields
           
