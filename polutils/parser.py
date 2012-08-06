@@ -26,7 +26,7 @@ class ItemParser(object):
         self.lang_fields = ['name', 'description', 'log-name-singular', 'log-name-plural']
         self.rename_fields = rename_fields
         self.detect_lang = detect_lang
-        self.lang_sep = "-"
+        self.lang_sep = lang_sep
         
         if rename_fields:
             self.fields.extend(rename_fields.keys())
