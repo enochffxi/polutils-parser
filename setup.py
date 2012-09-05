@@ -5,7 +5,7 @@ DESCRIPTION = "Parse XML files generated from POLUtils"
 with open('README') as f:
     LONG_DESCRIPTION = f.read()
 
-VERSION = '0.0.5'
+VERSION = '0.0.6'
 
 setup(
     name = "POLUtils Parser",
