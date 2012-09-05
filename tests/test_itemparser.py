@@ -2,6 +2,7 @@ import unittest
 import argparse
 import polutils
 import os
+import sys
 
 class TestItemParser(unittest.TestCase):
     def setUp(self):
